@@ -26,7 +26,7 @@ initiatives = pd.read_csv(r'C:\Users\Harish\OneDrive\Desktop\policy\initiatives.
 
 issues = pd.read_csv(r'C:\Users\Harish\OneDrive\Desktop\policy\user_data.csv', sep = ',') #file with the user replies
 #print(issues.head())
-rows = issues.count() #no of rows
+rows = len(issues)
 print('Number of respondents: ', rows)
 
 
@@ -40,6 +40,14 @@ max_num = issue_counts['count'].idxmax() #max count
 priority = issue_counts.loc[max_num, 'issues_faced_in'] #most voted issue
 print("Most Prevelant Issue:", priority) #if max count by two, alphabetically first
 
+policy = initiatives[initiatives['section']==priority].reset_index() #all those rows where section matches with priority
+# print(policy)
+
+if not policy.empty: #if atleast 1 row found with section = priority
+    recommendation = random.choice(policy['priority_action'].values)
+    print('Recommended Policy for', priority, ':', recommendation)
+
+    
 #ploting bar graph
 plt.figure(figsize=(10,6))
 plt.bar(issue_counts['issues_faced_in'], issue_counts['count'])  
@@ -48,9 +56,3 @@ plt.ylabel('Number of People')
 plt.title('Issues Faced By Youth')
 plt.show()
 
-policy = initiatives[initiatives['section']==priority].reset_index() #all those rows where section matches with priority
-# print(policy)
-
-if not policy.empty: #if atleast 1 row found with section = priority
-    recommendation = random.choice(policy['priority_action'].values)
-    print('Recommended Policy for', priority, ':', recommendation)
